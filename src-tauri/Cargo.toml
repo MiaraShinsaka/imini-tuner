@@ -1,6 +1,6 @@
 [package]
 name = "imini-tuner"
-version = "2.2.0"
+version = "2.2.1"
 description = "iMini Tuner - fan and performance control for Mechrevo imini Pro 830"
 authors = ["iMini Tuner contributors"]
 edition = "2021"

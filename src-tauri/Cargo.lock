@@ -1710,7 +1710,7 @@ dependencies = [
 
 [[package]]
 name = "imini-tuner"
-version = "2.2.0"
+version = "2.2.1"
 dependencies = [
  "serde",
  "serde_json",

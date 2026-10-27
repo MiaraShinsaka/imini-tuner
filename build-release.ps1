@@ -4,7 +4,10 @@ param(
 
 $ErrorActionPreference = "Stop"
 $root = $PSScriptRoot
-$version = "2.2.0"
+# Version comes from tauri.conf.json (also mirrored in Cargo.toml and setup.iss).
+$confText = [System.IO.File]::ReadAllText((Join-Path $root "src-tauri\tauri.conf.json"), [System.Text.Encoding]::UTF8)
+$version = ($confText | ConvertFrom-Json).version
+Write-Host "Building iMini Tuner $version"
 
 if (-not $NoBuild) {
     & (Join-Path $root "build-tauri.ps1") -Edition full -OutDir "dist" -Name "iMini Tuner.exe"

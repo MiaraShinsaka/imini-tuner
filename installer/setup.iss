@@ -2,7 +2,7 @@
 ; 编译：ISCC.exe setup.iss
 
 #define MyAppName "iMini Tuner"
-#define MyAppVersion "2.2.0"
+#define MyAppVersion "2.2.1"
 #define MyAppPublisher "iMini Tuner contributors"
 #define MyAppExeName "iMini Tuner.exe"
 #define MyAppId "{{C23E1CF6-CAF0-496E-996F-9A81A079CB93}"
@@ -33,7 +33,7 @@ AllowNoIcons=yes
 UsePreviousAppDir=no
 SetupLogging=yes
 AppMutex=Local\iminiCC.ControlCenter
-VersionInfoVersion=2.2.0.0
+VersionInfoVersion=2.2.1.0
 VersionInfoCompany={#MyAppPublisher}
 VersionInfoDescription={#MyAppName} 安装程序
 LicenseFile={#SourcePath}\..\LICENSE

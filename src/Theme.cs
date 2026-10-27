@@ -130,7 +130,10 @@ namespace ImimiCC
                 Native.DwmSetWindowAttribute(hwnd, 20, ref dark, 4);
                 int corner = 2;
                 Native.DwmSetWindowAttribute(hwnd, 33, ref corner, 4);
-                int border = ColorTranslator.ToWin32(IsDark ? Bg : Border);
+                // DWMWA_BORDER_COLOR = DWMWA_COLOR_NONE.  The card paints its own
+                // 1px border; leaving the DWM border enabled draws a second dark
+                // outline outside it that is only visible on light backgrounds.
+                int border = unchecked((int)0xFFFFFFFE);
                 Native.DwmSetWindowAttribute(hwnd, 34, ref border, 4);
             }
             catch
