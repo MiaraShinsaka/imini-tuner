@@ -1,0 +1,96 @@
+name: Bug report
+description: 程序崩溃、切模式失败、界面异常、自启失败等可复现问题
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈。请先确认：程序以管理员身份运行；已阅读 README 的「兼容性」和「风险」部分。
+        如果是死机、风扇失控、无法开机等硬件异常，请先停止写入、切回原模式并断电，再填写本表。
+
+  - type: input
+    id: model
+    attributes:
+      label: 机型 / 主板
+      placeholder: MECHREVO IMINI Series / IMINI-ARB32H-HPT
+    validations:
+      required: true
+
+  - type: input
+    id: bios
+    attributes:
+      label: BIOS 版本
+      placeholder: AMI 1.12
+    validations:
+      required: true
+
+  - type: input
+    id: windows
+    attributes:
+      label: Windows 版本
+      placeholder: Windows 11 26200
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: 程序版本
+      placeholder: v1.0.0
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 从打开程序开始，越具体越好
+      placeholder: |
+        1. 双击 exe，UAC 选「是」
+        2. 点击「狂暴模式」
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望结果
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际结果
+      description: 包括错误提示、界面表现、是否切模式成功
+    validations:
+      required: true
+
+  - type: textarea
+    id: status
+    attributes:
+      label: --status 输出（请脱敏）
+      description: 管理员运行 `"%LOCALAPPDATA%\iminiControlCenter\imini-power-210.exe" --status` 后贴 JSON
+      render: json
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 日志 / 诊断
+      description: 贴 `app.log` 相关片段；必要时附 `--diagnostics` 生成的 diagnostics.txt（删除用户名、计算机名等）
+      render: text
+
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: 确认
+      options:
+        - label: 我以管理员身份运行了程序
+          required: true
+        - label: 我已删除日志中的用户名、计算机名等隐私信息
+          required: true
+        - label: 我没有在 Issue 中上传官方安装包、官方 DLL 或反编译源码
+          required: true

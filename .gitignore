@@ -1,0 +1,65 @@
+# ============================================================================
+# 公开仓库忽略规则
+#
+# 这个项目对官方程序做了互操作性逆向。以下文件绝对不要提交到 GitHub：
+#   - 机械革命官方安装包、解包目录、反编译产物、DLL/PYD
+#   - 官方程序自带的 Python 运行时与 Qt 运行库
+#   - 本机构建产物、发布 zip、自检截图与日志
+#   - 代码签名私钥与口令（泄露后可被用来冒充本项目签名）
+# 只提交源码、构建脚本、文档和我们自己的截图/图标。
+# ============================================================================
+
+# --- 官方安装包与逆向工作产物（禁止公开） ---
+机械革命控制中心V1.4.exe
+ImagesShowSetUpOSDV2.4.exe
+innoextract.zip
+extracted/
+*_extracted/
+decompiled_*/
+probe/
+*.py
+*.pyd
+*.dll
+*.exe
+*.zip
+
+# tools/ 只保留快捷键 E2E 自检源码；MinGit、innoextract 等本地工具不进仓库
+tools/*
+!tools/hotkey-e2e/
+!tools/hotkey-e2e/**
+
+# --- 构建与发布产物 ---
+dist/
+dist-*/
+dist-portable/
+build/
+src-tauri/target/
+src-tauri/gen/
+hotkey-helper/target/
+release/
+selftest*/
+
+# --- 代码签名材料（私钥绝不入库） ---
+certs/
+*.pfx
+*.p12
+*.key
+*.snk
+*.cer
+
+# --- 自检/调试产物 ---
+portable-test/
+qa-*.png
+*.log
+*.tmp
+*.pdb
+
+# --- Python / IDE / 系统 ---
+__pycache__/
+*.py[cod]
+.vs/
+.vscode/
+*.user
+*.suo
+Thumbs.db
+desktop.ini

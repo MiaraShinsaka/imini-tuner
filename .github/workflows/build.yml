@@ -1,0 +1,37 @@
+name: build
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            src-tauri/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('src-tauri/Cargo.lock') }}
+
+      - name: Build Tauri app
+        run: powershell.exe -NoProfile -ExecutionPolicy Bypass -File build-tauri.ps1 -Edition full
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: imini-tuner
+          path: dist/*.exe
+          if-no-files-found: error

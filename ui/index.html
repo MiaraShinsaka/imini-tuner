@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>iMini Tuner</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="window" id="window">
+    <header class="titlebar">
+      <div class="brand">
+        <img class="logo" src="logo.png" alt="">
+        <div class="brand-text">
+          <div class="brand-name">iMini Tuner</div>
+          <div class="brand-sub" id="machine-model">正在读取机型…</div>
+        </div>
+      </div>
+      <div class="window-actions">
+        <button class="icon-btn" id="btn-settings" title="设置" aria-label="设置">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 7h9M17 7h3M4 12h3M11 12h9M4 17h9M17 17h3" />
+            <circle cx="15" cy="7" r="2" /><circle cx="9" cy="12" r="2" /><circle cx="15" cy="17" r="2" />
+          </svg>
+        </button>
+        <button class="icon-btn" id="btn-min" title="最小化" aria-label="最小化">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12" /></svg>
+        </button>
+        <button class="icon-btn close-btn" id="btn-close" title="关闭" aria-label="关闭">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17" /></svg>
+        </button>
+      </div>
+    </header>
+
+    <nav class="tabs" id="tabs" aria-label="功能页面">
+      <button class="tab active" data-page="mode">模式调整</button>
+      <button class="tab" data-page="fan">风扇调整</button>
+    </nav>
+
+    <main class="workspace" id="workspace">
+      <section class="page page-mode" id="page-mode">
+        <section class="current">
+          <div class="current-copy">
+            <div class="eyebrow">当前模式</div>
+            <div class="mode-name" id="mode-name">正在读取…</div>
+          </div>
+          <div class="metrics">
+            <div class="metric">
+              <div class="metric-label">CPU 温度</div>
+              <div class="metric-value"><span id="temp">—</span><span class="unit">°C</span></div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">风扇转速</div>
+              <div class="metric-value"><span id="fan">—</span><span class="unit">RPM</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="cards" id="cards">
+          <button class="card" data-mode="2" id="card-2">
+            <span class="card-icon silent-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14c3-5 5-7 8-7s4 2 7 7c-2.2 1.7-4.4 2.5-7 2.5S6.2 15.7 4 14Z"/><path d="M9 7.5C10 5.8 11 5 12 5"/></svg>
+            </span>
+            <span class="card-title">静音模式</span>
+            <span class="card-desc">安静省电，适合夜间</span>
+            <span class="check"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+          </button>
+
+          <button class="card" data-mode="0" id="card-0">
+            <span class="card-icon balanced-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9v6M9 6v12M13 8v8M17 5v14M21 10v4"/></svg>
+            </span>
+            <span class="card-title">均衡模式</span>
+            <span class="card-desc">性能与噪音平衡</span>
+            <span class="check"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+          </button>
+
+          <button class="card" data-mode="1" id="card-1">
+            <span class="card-icon performance-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3 5 14h6l-1 7 8-11h-6l1-7Z"/></svg>
+            </span>
+            <span class="card-title">狂暴模式</span>
+            <span class="card-desc">满血性能，风扇全开</span>
+            <span class="check"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+          </button>
+        </section>
+      </section>
+
+      <section class="page page-fan" id="page-fan" hidden>
+        <section class="fan-head">
+          <div>
+            <div class="eyebrow">风扇调控</div>
+            <div class="fan-state" id="fan-state">自动调节</div>
+          </div>
+          <div class="metrics">
+            <div class="metric">
+              <div class="metric-label">CPU 温度</div>
+              <div class="metric-value"><span id="fan-temp">—</span><span class="unit">°C</span></div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">实际转速</div>
+              <div class="metric-value"><span id="fan-rpm">—</span><span class="unit">RPM</span></div>
+            </div>
+          </div>
+        </section>
+
+        <div class="compat-warning" id="compat-warning" hidden>
+          未在当前机型下验证该功能可用性，请自行测试
+        </div>
+
+        <section class="fan-control">
+          <div class="fan-control-head">
+            <div>
+              <div class="section-label">目标转速</div>
+              <div class="fan-value" id="fan-value">自动</div>
+            </div>
+            <button class="btn auto-btn" id="fan-auto">恢复自动</button>
+          </div>
+          <input class="fan-slider" id="fan-slider" type="range" min="35" max="100" step="1" value="55">
+          <div class="fan-scale">
+            <span id="fan-min-label">35%</span>
+            <span>100%</span>
+          </div>
+        </section>
+
+        <section class="safety">
+          <div class="safety-row">
+            <div class="safety-copy">
+              <div class="option-title">忽视转速调节最低限制</div>
+              <div class="option-note">允许把风扇设置到 35% 以下。仅在明确了解散热风险时开启。</div>
+            </div>
+            <button class="switch safety-switch" id="low-override" type="button" role="switch" aria-checked="false" aria-label="忽视转速调节最低限制">
+              <span class="track"></span>
+            </button>
+          </div>
+          <div class="safety-row danger-row" id="temp-protection-row" hidden>
+            <div class="safety-copy">
+              <div class="option-title">温度保护 <span class="protect-tag">≥ 88°C</span></div>
+              <div class="option-note">温度达到 88°C 时自动恢复固件自动风扇，避免持续过热。</div>
+            </div>
+            <button class="switch safety-switch" id="temp-protection" type="button" role="switch" aria-checked="true" aria-label="温度保护">
+              <span class="track"></span>
+            </button>
+          </div>
+          <div class="safety-note" id="safety-note">低温保护默认启用；自定义转速会在退出程序时恢复自动。</div>
+        </section>
+      </section>
+
+      <div class="busy" id="busy" hidden>
+        <span class="busy-spinner" aria-hidden="true"></span>
+        <span class="busy-text" id="busy-text">正在切换模式…</span>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-copy">
+        <div class="status-line">
+          <span class="status-dot" id="status-dot"></span>
+          <span id="status-text">正在连接固件接口…</span>
+        </div>
+        <div class="hint" id="hint"></div>
+      </div>
+      <button class="autostart" id="autostart" type="button" role="switch" aria-checked="false">
+        <span>开机自启</span>
+        <span class="switch"><span class="track"></span></span>
+      </button>
+    </footer>
+  </div>
+
+  <div class="overlay gate" id="fan-gate" hidden>
+    <section class="dialog gate-dialog" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+      <header class="dialog-head">
+        <div>
+          <div class="dialog-title" id="gate-title">风扇调节免责声明</div>
+          <div class="dialog-sub">请先阅读后再进入风扇调控</div>
+        </div>
+      </header>
+      <div class="dialog-body gate-body">
+        <p>风扇转速调节会直接写入主板固件。风扇转速过低可能导致高负载时散热不足，进而造成硬件损坏或缩短使用寿命。</p>
+        <p>请确认你了解相关风险，并自行承担调节风扇带来的后果。程序会在退出时尝试恢复自动风扇，但无法覆盖断电、强制结束进程或固件异常等情况。</p>
+        <p class="gate-strong">点击“我已知晓”后，才能操作风扇调控功能。</p>
+      </div>
+      <footer class="dialog-foot">
+        <button class="btn primary" id="fan-gate-accept">我已知晓</button>
+      </footer>
+    </section>
+  </div>
+
+  <div class="overlay warning" id="warning-overlay" hidden>
+    <section class="dialog warning-dialog" role="dialog" aria-modal="true" aria-labelledby="warning-title">
+      <header class="dialog-head">
+        <div>
+          <div class="dialog-title" id="warning-title">低速风扇风险</div>
+          <div class="dialog-sub">请确认是否继续</div>
+        </div>
+      </header>
+      <div class="dialog-body warning-body">
+        <div class="warning-icon" aria-hidden="true">!</div>
+        <p class="warning-text">散热风扇转速过低有可能使高负载运行时机器温度过高，进而导致损坏！</p>
+      </div>
+      <footer class="dialog-foot">
+        <button class="btn subtle" id="warning-cancel">取消</button>
+        <button class="btn danger" id="warning-confirm">仍要开启</button>
+      </footer>
+    </section>
+  </div>
+
+  <div class="overlay" id="settings-overlay" hidden>
+    <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <header class="dialog-head">
+        <div>
+          <div class="dialog-title" id="settings-title">设置</div>
+          <div class="dialog-sub">iMini Tuner</div>
+        </div>
+        <button class="icon-btn" id="settings-close" title="关闭" aria-label="关闭">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17" /></svg>
+        </button>
+      </header>
+      <div class="dialog-body">
+        <div class="section-label">快捷键切换模式</div>
+        <div class="hotkey-mode-row">
+          <div class="option-copy">
+            <span class="option-title">自定义三模式热键</span>
+            <span class="option-note">关闭时使用单个热键轮换；开启后分别设置静音、均衡、狂暴。</span>
+          </div>
+          <button class="switch" id="hotkey-mode-toggle" type="button" role="switch" aria-checked="false" aria-label="自定义三模式热键">
+            <span class="track"></span>
+          </button>
+        </div>
+        <div id="hotkey-cycle">
+          <div class="section-label second">轮换热键</div>
+          <div class="field-row">
+            <div id="hotkey" class="hotkey-field" tabindex="0" role="textbox" aria-readonly="true" aria-label="轮换模式快捷键"></div>
+            <button class="btn subtle" id="hotkey-reset">恢复默认</button>
+          </div>
+          <div class="field-note" id="hotkey-note">点击输入框后按下组合键；至少包含一个修饰键。</div>
+        </div>
+
+        <div id="hotkey-custom" hidden>
+          <div class="hk-row">
+            <span class="hk-label">静音模式</span>
+            <div id="hotkey-silent" class="hotkey-field" tabindex="0" role="textbox" aria-readonly="true" aria-label="静音模式快捷键"></div>
+          </div>
+          <div class="hk-row">
+            <span class="hk-label">均衡模式</span>
+            <div id="hotkey-balanced" class="hotkey-field" tabindex="0" role="textbox" aria-readonly="true" aria-label="均衡模式快捷键"></div>
+          </div>
+          <div class="hk-row">
+            <span class="hk-label">狂暴模式</span>
+            <div id="hotkey-performance" class="hotkey-field" tabindex="0" role="textbox" aria-readonly="true" aria-label="狂暴模式快捷键"></div>
+          </div>
+          <div class="field-note" id="hotkey-custom-note">三个快捷键不能重复；至少包含一个修饰键。</div>
+        </div>
+
+        <div class="modifier-help" aria-label="修饰键定义">
+          <span class="hk-mod" data-tip="Ctrl：Control 键，常用的快捷键修饰键">Ctrl</span>
+          <span class="hk-mod" data-tip="Alt：Alternate 键，常用于菜单和组合键">Alt</span>
+          <span class="hk-mod" data-tip="Shift：Shift 键，用于大小写或组合快捷键">Shift</span>
+          <span class="hk-mod" data-tip="Win：Windows 键，用于系统级快捷键">Win</span>
+        </div>
+
+        <div class="section-label second">窗口与托盘</div>
+        <label class="option-row">
+          <input type="checkbox" id="close-to-tray">
+          <span class="option-copy">
+            <span class="option-title">关闭窗口后保留后台运行</span>
+            <span class="option-note">关闭按钮只隐藏窗口，服务继续运行，托盘图标可选。</span>
+          </span>
+        </label>
+        <label class="option-row">
+          <input type="checkbox" id="show-tray">
+          <span class="option-copy">
+            <span class="option-title">显示托盘图标</span>
+            <span class="option-note">取消勾选后不显示图标，仍可用「show-window.cmd」或「show-window.ps1」唤回。</span>
+          </span>
+        </label>
+        <div class="field-note">切换模式后会发送「已切换到“指定模式”」通知。</div>
+      </div>
+      <footer class="dialog-foot">
+        <button class="btn subtle" id="settings-cancel">取消</button>
+        <button class="btn primary" id="settings-save">保存设置</button>
+      </footer>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+[package]
+name = "imini-hotkey-helper"
+version = "2.2.0"
+edition = "2021"
+description = "Standalone WH_KEYBOARD_LL capture helper for iMini Tuner"
+publish = false
+
+[[bin]]
+name = "imini-hotkey-helper"
+path = "src/main.rs"
+
+[[bin]]
+name = "hotkey-selftest"
+path = "src/bin/hotkey_selftest.rs"
+
+[dependencies]
+windows-sys = { version = "0.59", features = [
+    "Win32_Foundation",
+    "Win32_Security",
+    "Win32_System_LibraryLoader",
+    "Win32_System_StationsAndDesktops",
+    "Win32_System_Threading",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_UI_Input_KeyboardAndMouse",
+] }
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true
+
